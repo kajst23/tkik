@@ -1,0 +1,23 @@
+SET TEMPO = 140
+
+NutaStartowa = E4:2
+BaseMotif = [C4:4, E4:4, G4:4]
+AkordAkcent = <C4,E4,G4>:2
+
+TransposedMotif = @TRANSPOSE(BaseMotif, 2)
+OdwroconyMotif  = @REVERSE(TransposedMotif)
+
+TRACK GłównaMelodia {
+    PLAY(NutaStartowa)
+    PLAY(AkordAkcent)
+    PLAY(P:4)
+    
+    PLAY(BaseMotif)
+    
+    LOOP 2 {
+        PLAY(TransposedMotif)
+        PLAY(OdwroconyMotif)
+    }
+    
+    PLAY(@TRANSPOSE(AkordAkcent, 5), times=2)
+}

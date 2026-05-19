@@ -1,0 +1,5 @@
+SET TEMPO = 120
+
+TRACK MojaSciezka {
+    [C4:4, E4:4, G4:4]
+}

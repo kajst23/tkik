@@ -1,0 +1,48 @@
+start: program
+
+program: statement*
+
+?statement: track_def
+          | assignment
+          | set_param
+          | loop_block
+          | play_func
+
+track_def: "TRACK" CNAME "{" statement* "}"
+
+assignment: CNAME "=" expr
+
+set_param: "SET" CNAME "=" INT
+
+loop_block: "LOOP" INT "{" statement* "}"
+
+play_func: "PLAY" "(" expr ("," "times=" INT)? ")"
+
+?expr: INT          -> int_expr
+     | note         -> note_expr
+     | chord        -> chord_expr
+     | rest         -> rest_expr
+     | sequence     -> seq_expr
+     | macro_call   -> macro_expr
+     | CNAME        -> var_reference
+
+sequence: "[" (expr ("," expr)*)? "]"
+
+macro_call: "@" CNAME "(" expr ("," expr)* ")"
+
+note: NOTE_PITCH duration?
+chord: "<" NOTE_PITCH ("," NOTE_PITCH)* ">" duration?
+rest: REST_CHAR duration?
+
+duration: ":" INT
+
+NOTE_PITCH.2: /[A-G][b#]?[0-9]?(?![a-zA-Z0-9_])/
+REST_CHAR.2: /P(?![a-zA-Z0-9_])/
+
+%import common.CNAME
+%import common.INT
+%import common.WS
+%import common.SH_COMMENT -> COMMENT
+
+%ignore WS
+%ignore COMMENT
