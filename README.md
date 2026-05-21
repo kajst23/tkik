@@ -46,7 +46,8 @@ Rozwinięty potok kompilacji dzieli się na trzy fazy:
 ### Wymagane moduły:
 Aby zainstalować wszystkie wymagane moduły, użyj komendy:
 ```bash
-pip install lark midiutil mido python-rtmidiUruchomienie tradycyjne (Transpiler do pliku MIDI):
+pip install lark midiutil mido python-rtmidi
+Uruchomienie tradycyjne (Transpiler do pliku MIDI):
 Aby skompilować plik z kodem (domyślnie użyje example.music i wygeneruje output.mid), użyj:
 
 python main.py --input example.music --output output.mid
