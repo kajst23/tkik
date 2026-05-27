@@ -50,8 +50,17 @@ class MelodyTransformer(Transformer):
         return {"type": "play", "value": expr_val, "times": times}
 
     def int_expr(self, items):
-        return Integer(int(items[0]))
-
+        # Sprawdzamy czy pierwszy element to znak minusa
+        if len(items) == 2 and str(items[0]) == "-":
+            val = -int(items[1])
+        # Awaryjnie, gdyby Lark przekazał to jako jeden scalony ciąg tekstowy (np. "-12")
+        elif len(items) == 1 and str(items[0]).startswith("-"):
+            val = int(str(items[0]))
+        else:
+            val = int(items[0])
+            
+        return Integer(val)
+    
     def note_expr(self, items):
         return items[0]
 

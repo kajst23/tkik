@@ -18,7 +18,7 @@ loop_block: "LOOP" INT "{" statement* "}"
 
 play_func: "PLAY" "(" expr ("," "times=" INT)? ")"
 
-?expr: INT          -> int_expr
+?expr: ["-"] INT    -> int_expr
      | note         -> note_expr
      | chord        -> chord_expr
      | rest         -> rest_expr

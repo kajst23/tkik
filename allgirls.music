@@ -1,18 +1,28 @@
-SET TEMPO = 117
+SET TEMPO = 82
 
-# Dokładny podział taktów z obrazka (oktawa 3, aby zachować brudny, grunge'owy klimat)
-Takt1 = [B3:2, D4:4, A3:2, B3:2]
-Takt2 = [G3:2, B3:4, G3:1]
+# Definicje taktów w siatce szesnastkowej:
+# 4 = 1 uderzenie (ćwierćnuta), 2 = pół uderzenia (ósemka)
+# 6 = półtora uderzenia (3 uderzenia ósemkowe / pomarańczowy pasek)
+Takt1 = [B4:4, D5:2, A4:6, B4:4]
+Fin1  = [G4:4, B4:2, G4:10]
+Fin2  = [G4:4, B4:2, G4:6, D5:4]
 
-TRACK SmellsLikeTeenSpirit {
-    # Legendarny riff powtórzony cztery razy (wstęp utworu)
-    LOOP 4 {
+TRACK NirvanaSiatkaSzesnastkowa {
+    # 1. Oryginalna, niska wersja utworu (2 powtórzenia pełnego schematu)
+    LOOP 2 {
         PLAY(Takt1)
-        PLAY(Takt2)
-        PLAY(P:4) # krótka pauza na uderzenie werbla
+        PLAY(Fin1)
+        PLAY(Takt1)
+        PLAY(Fin2)
     }
-    
-    # Pokaz dla prowadzącego: powtórzenie riffu z modulacją za pomocą makra
-    PLAY(@TRANSPOSE(Takt1, 2))
-    PLAY(@TRANSPOSE(Takt2, 2))
+
+
+    # 2. Dynamiczne podniesienie tonacji (TRANSPOZYCJA o 5 półtonów w górę)
+    # Wykorzystujemy makro bezpośrednio na zdefiniowanych wcześniej taktach!
+    LOOP 2 {
+        PLAY(@TRANSPOSE(Takt1, 12))
+        PLAY(@TRANSPOSE(Fin1, 12))
+        PLAY(@TRANSPOSE(Takt1, 12))
+        PLAY(@TRANSPOSE(Fin2, 12))
+    }
 }

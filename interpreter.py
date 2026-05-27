@@ -70,8 +70,11 @@ class MelodyInterpreter:
             self.play_rest(val)
 
     def calculate_duration(self, duration_type) -> float:
-        # duration 4 = ćwierćnuta (1 uderzenie) -> 60 / tempo
-        beats = 4.0 / duration_type
+        # duration_type to teraz liczba szesnastek (1/16 nuty)
+        # 4 szesnastki = 1 uderzenie (beat)
+        beats = float(duration_type) / 4.0
+        
+        # Przeliczamy uderzenia na sekundy w zadanym tempie BPM
         return beats * (60.0 / self.tempo)
 
     def play_note(self, note: Note):
