@@ -1,0 +1,22 @@
+SET TEMPO = 110
+
+# Legendarny motyw początkowy (Fanfara)
+FanfaraIntro = [G3:8, G3:8, G3:8]
+MotywGlowny  = [C4:2, G4:2, F4:8, E4:8, D4:8, C5:2, G4:4, F4:8, E4:8, D4:8, C5:2, G4:4, F4:8, E4:8, F4:8, D4:2]
+
+# Użycie makra, aby powtórzyć motyw w innej tonacji (wzniosłe przejście)
+MotywTransponowany = @TRANSPOSE(MotywGlowny, 7)
+
+TRACK GwiezdneWojny {
+    # Rozpoczęcie utworu fanfarą trzema nutami G
+    PLAY(FanfaraIntro)
+    
+    # Pierwsza, klasyczna część melodii
+    PLAY(MotywGlowny)
+    
+    # Krótka pauza dramatyczna (półnuta)
+    PLAY(P:2)
+    
+    # Wykonanie makra: ta sama melodia, ale zagra na wyżej
+    PLAY(MotywTransponowany)
+}

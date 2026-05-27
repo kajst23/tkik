@@ -104,8 +104,22 @@ class MelodyTransformer(Transformer):
         return Chord(pitches, duration)
 
     def rest(self, items):
-        duration = items[0] if len(items) > 0 and items[0] is not None else 4
+        duration = 4
+        for item in items:
+            if item is not None:
+                # Ignorujemy sam znak pauzy 'P'
+                if str(item) == 'P':
+                    continue
+                # Jeśli to obiekt Integer z systemu typów lub Token, wyciągamy wartość liczbową
+                if hasattr(item, 'value'):
+                    duration = int(item.value)
+                else:
+                    try:
+                        duration = int(str(item))
+                    except ValueError:
+                        continue
         return Rest(duration)
+    
 
     def duration(self, items):
         return int(items[0])

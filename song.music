@@ -7,7 +7,7 @@ AkordAkcent = <C4,E4,G4>:2
 TransposedMotif = @TRANSPOSE(BaseMotif, 2)
 OdwroconyMotif  = @REVERSE(TransposedMotif)
 
-TRACK GłównaMelodia {
+TRACK GlownaMelodia {
     PLAY(NutaStartowa)
     PLAY(AkordAkcent)
     PLAY(P:4)
