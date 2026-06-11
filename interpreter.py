@@ -5,7 +5,6 @@ from runtime_types import Note, Chord, Rest, Sequence
 class MelodyInterpreter:
     def __init__(self):
         self.tempo = 120
-        # Wbudowana artykulacja: nuta gra przez 85% czasu, 15% to oddech (staccato)
         self.gate = 0.85 
         self.outport = None
         
@@ -31,20 +30,16 @@ class MelodyInterpreter:
             for statement in ast:
                 self.execute(statement)
         except KeyboardInterrupt:
-            # Użytkownik wcisnął Ctrl+C
             print("\n[-] Odtwarzanie przerwane przez uzytkownika (Ctrl+C).")
         except Exception as e:
-            # Przechwytujemy każdy inny błąd bez całkowitego crashu konsoli
             print(f"\n[BLAD RUNTIME] Krytyczny blad interpretera: {e}")
         finally:
-            # Blok finally ZAWSZE się wykona, nawet po błędzie. 
-            # Ratuje nas przed nieskończonym "piskiem" syntezatora.
             if self.outport:
                 print("[*] Resetowanie i zamykanie portu MIDI...")
                 try:
-                    self.outport.reset() # Szybkie wyciszenie wszystkich dźwięków
+                    self.outport.reset() 
                 except AttributeError:
-                    pass # Niektóre wirtualne porty nie wspierają reset()
+                    pass 
                 self.outport.close()
 
     def execute(self, stmt):

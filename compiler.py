@@ -50,10 +50,8 @@ class MelodyTransformer(Transformer):
         return {"type": "play", "value": expr_val, "times": times}
 
     def int_expr(self, items):
-        # Sprawdzamy czy pierwszy element to znak minusa
         if len(items) == 2 and str(items[0]) == "-":
             val = -int(items[1])
-        # Awaryjnie, gdyby Lark przekazał to jako jeden scalony ciąg tekstowy (np. "-12")
         elif len(items) == 1 and str(items[0]).startswith("-"):
             val = int(str(items[0]))
         else:
@@ -116,10 +114,8 @@ class MelodyTransformer(Transformer):
         duration = 4
         for item in items:
             if item is not None:
-                # Ignorujemy sam znak pauzy 'P'
                 if str(item) == 'P':
                     continue
-                # Jeśli to obiekt Integer z systemu typów lub Token, wyciągamy wartość liczbową
                 if hasattr(item, 'value'):
                     duration = int(item.value)
                 else:
