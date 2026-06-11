@@ -1,0 +1,39 @@
+SET TEMPO = 110
+
+# NOWA PODZIALKA (PPQN = 12)
+# 12 = cwiercnuta (1 uderzenie)
+# 6  = osemka
+# 4  = triola osemkowa
+# 3  = szesnastka
+
+# Przedtakt: Idealna triola osemkowa (trwa równo 1 uderzenie)
+FanfaraIntro = [G4:4, G4:4, G4:4]
+
+# Czesc A: Glowny motyw
+# Ostatni dzwiek D5:24 to 2 uderzenia. Zostawiamy tu miejsce na Fanfare!
+MotywGlownyA = [C5:24, G5:24, F5:4, E5:4, D5:4, C6:24, G5:12, F5:4, E5:4, D5:4, C6:24, G5:12, F5:4, E5:4, F5:4, D5:24]
+
+# Czesc B: Rozwiniecie/Mostek (Rebel Fanfare)
+# Poprawione D5:12 na D5:6, aby zachować równy ciąg ósemek i nie łamać taktu
+MotywGlownyB = [A4:24, A4:6, F5:12, E5:6, D5:6, C5:6, C5:6, D5:6, E5:6, D5:6, A4:6, B4:6, G4:24]
+
+TRACK EpickieGwiezdneWojny {
+    # 1. Poczatek w C-dur
+    PLAY(FanfaraIntro)
+    PLAY(MotywGlownyA)
+    
+    # 2. Mostek (Ta fanfara idealnie wypelni 4. miare taktu po Motywie A)
+    PLAY(FanfaraIntro) 
+    PLAY(MotywGlownyB)
+    
+    # 3. Przejscie
+    # G4:24 z Motywu B trwa 2 uderzenia. Pauza 1 uderzenie + Fanfara 1 uderzenie = pelny takt!
+    PLAY([P:12])
+    
+    # 4. Modulacja o 7 poltonow w gore (do G-dur)
+    PLAY(@TRANSPOSE(FanfaraIntro, 7))
+    PLAY(@TRANSPOSE(MotywGlownyA, 7))
+    
+    # 5. Epickie zakonczenie przetransponowane do nowej tonacji
+    PLAY([D6:4, D6:4, D6:4, G6:48])
+}
