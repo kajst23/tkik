@@ -6,6 +6,7 @@ PITCH_MAP = {
     'Ab': 8, 'A': 9, 'A#': 10, 'Bb': 10, 'B': 11
 }
 
+
 class MidiGenerator:
     def __init__(self, events):
         self.events = events
