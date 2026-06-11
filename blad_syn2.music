@@ -1,0 +1,8 @@
+SET TEMPO = 120
+
+# brak przecinka między pierwszą a drugą nutą
+Motyw = [C4:12 G4:12, F4:4]
+
+TRACK Testowy {
+    PLAY(Motyw)
+}
