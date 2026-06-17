@@ -1,0 +1,1 @@
+C:/Users/skita/anaconda3/python.exe
