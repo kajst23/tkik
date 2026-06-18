@@ -44,7 +44,33 @@ Rozwinięty potok kompilacji dzieli się na trzy fazy:
 
 ## Instrukcja uruchomienia
 
+
+
 ### Wymagane moduły
+
 Aby zainstalować wszystkie wymagane zależności dla analizatora składniowego, generatora i interfejsu audio, użyj komendy:
+
 ```bash
+
 pip install lark midiutil mido python-rtmidi
+
+
+
+Uruchomienie tradycyjne (Transpiler do pliku MIDI):
+
+Aby skompilować plik z kodem (domyślnie użyje example.music i wygeneruje output.mid), użyj:
+
+
+
+python main.py --input example.music --output output.mid
+
+
+
+Uruchomienie nowego Live Interpretera (Odtwarzanie w locie):
+
+Aby odtworzyć utwór wykorzystujący zaawansowany system typów i makra bezpośrednio na żywo, użyj:
+
+
+
+python main_interpreter.py --input song.music 
+
