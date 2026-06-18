@@ -1,13 +1,18 @@
 SET TEMPO = 82
 
-# Definicje taktów w nowej siatce (PPQN = 12):
-# 12 = 1 uderzenie (ćwierćnuta), 6 = pół uderzenia (ósemka)
-# 18 = półtora uderzenia (3 uderzenia ósemkowe / pomarańczowy pasek)
-Takt1 = [B4:12, D5:6, A4:18, B4:12]
-Fin1  = [G4:12, B4:6, G4:30]
-Fin2  = [G4:12, B4:6, G4:18, D5:12]
+# ==========================================
+# SYSTEM KLASYCZNY:
+# 4 = 1 uderzenie (ćwierćnuta)
+# 8 = pół uderzenia (ósemka)
+# 2.666 = 1.5 uderzenia (ćwierćnuta z kropką)
+# 1.6 = 2.5 uderzenia
+# ==========================================
 
-TRACK NirvanaNowaSiatka {
+Takt1 = [B4:4, D5:8, A4:2.666, B4:4]
+Fin1  = [G4:4, B4:8, G4:1.6]
+Fin2  = [G4:4, B4:8, G4:2.666, D5:4]
+
+TRACK NirvanaKlasyczna {
     # 1. Oryginalna, niska wersja utworu (2 powtórzenia pełnego schematu)
     LOOP 2 {
         PLAY(Takt1)

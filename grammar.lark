@@ -12,13 +12,16 @@ track_def: "TRACK" CNAME "{" statement* "}"
 
 assignment: CNAME "=" expr
 
-set_param: "SET" CNAME "=" INT
+# Tempo może być teraz ułamkiem (np. 120.5)
+set_param: "SET" CNAME "=" NUMBER
 
+# Ilość powtórzeń pętli MUSI zostać jako INT
 loop_block: "LOOP" INT "{" statement* "}"
 
 play_func: "PLAY" "(" expr ("," "times=" INT)? ")"
 
-?expr: ["-"] INT    -> int_expr
+# Zmiana z INT na NUMBER, aby pozwolić na parametry ułamkowe
+?expr: ["-"] NUMBER     -> int_expr
      | note         -> note_expr
      | chord        -> chord_expr
      | rest         -> rest_expr
@@ -34,13 +37,15 @@ note: NOTE_PITCH duration?
 chord: "<" NOTE_PITCH ("," NOTE_PITCH)* ">" duration?
 rest: REST_CHAR duration?
 
-duration: ":" INT
+# Najważniejsza zmiana: czas trwania przyjmuje ułamki (np. :2.666)
+duration: ":" NUMBER
 
 NOTE_PITCH.2: /[A-G][b#]?[0-9]?(?![a-zA-Z0-9_])/
 REST_CHAR.2: /P(?![a-zA-Z0-9_])/
 
 %import common.CNAME
 %import common.INT
+%import common.NUMBER
 %import common.WS
 %import common.SH_COMMENT -> COMMENT
 

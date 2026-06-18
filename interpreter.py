@@ -93,7 +93,13 @@ class MelodyInterpreter:
 
     def calculate_duration(self, duration_type) -> float:
         try:
-            beats = float(duration_type) / 12.0
+            dur_val = float(duration_type)
+            if dur_val <= 0:
+                raise ValueError(f"Dlugosc nuty musi byc wieksza od 0! Podano: {duration_type}")
+            
+            # NOWY SYSTEM ZGODNY ZE STANDARDEM MUZYCZNYM
+            # 1 = cala nuta, 2 = polnuta, 4 = cwiercnuta, 8 = osemka
+            beats = 4.0 / dur_val
         except (ValueError, TypeError):
             raise ValueError(f"Nie udalo sie obliczyc czasu trwania. Niewlasciwa wartosc rytmiczna: {duration_type}")
             

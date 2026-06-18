@@ -49,14 +49,23 @@ class MelodyTransformer(Transformer):
         times = int(items[1]) if len(items) > 1 else 1
         return {"type": "play", "value": expr_val, "times": times}
 
-    def int_expr(self, items):
-        if len(items) == 2 and str(items[0]) == "-":
-            val = -int(items[1])
-        elif len(items) == 1 and str(items[0]).startswith("-"):
-            val = int(str(items[0]))
-        else:
-            val = int(items[0])
+    # def int_expr(self, items):
+    #     if len(items) == 2 and str(items[0]) == "-":
+    #         val = -int(items[1])
+    #     elif len(items) == 1 and str(items[0]).startswith("-"):
+    #         val = int(str(items[0]))
+    #     else:
+    #         val = int(items[0])
             
+    #     return Integer(val)
+
+    def int_expr(self, args):
+        # Pobieramy wartość
+        val = float(args[-1])
+        if len(args) > 1 and args[0] == "-":
+            val = -val
+            
+        # ZWRACAMY OBIEKT Integer (żeby makro mogło odczytać val.value)
         return Integer(val)
     
     def note_expr(self, items):
@@ -127,7 +136,7 @@ class MelodyTransformer(Transformer):
     
 
     def duration(self, items):
-        return int(items[0])
+        return float(items[0])
 
     def macro_call(self, items):
         macro_name = str(items[0]).upper()

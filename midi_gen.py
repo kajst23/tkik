@@ -7,7 +7,6 @@ PITCH_MAP = {
     'Ab': 8, 'A': 9, 'A#': 10, 'Bb': 10, 'B': 11
 }
 
-
 class MidiGenerator:
     def __init__(self, events):
         self.events = events
@@ -21,41 +20,8 @@ class MidiGenerator:
     def _pitch_to_midi_num(self, pitch, octave):
         return (octave + 1) * 12 + PITCH_MAP[pitch]
 
-    # def generate(self):
-    #     self.time = 0.0 
-    #     PPQN = 12.0 
-
-    #     for event in self.events:
-    #         if event["type"] == "set_param":
-    #             if event["name"] == "TEMPO":
-    #                 self.tempo = event["value"]
-    #                 self.midi.addTempo(self.track, self.time, self.tempo)
-    #             elif event["name"] == "INSTRUMENT":
-    #                 self.midi.addProgramChange(self.track, self.channel, self.time, event["value"] - 1)
-            
-    #         elif event["type"] == "note":
-    #             midi_pitch = self._pitch_to_midi_num(event["pitch"], event["octave"])
-    #             duration_in_beats = event["duration"] / PPQN
-                
-    #             self.midi.addNote(self.track, self.channel, midi_pitch, self.time, duration_in_beats, 100)
-    #             self.time += duration_in_beats
-
-    #         elif event["type"] == "chord":
-    #             duration_in_beats = event["duration"] / PPQN
-                
-    #             for p in event["pitches"]:
-    #                 midi_pitch = self._pitch_to_midi_num(p["pitch"], p["octave"])
-    #                 self.midi.addNote(self.track, self.channel, midi_pitch, self.time, duration_in_beats, 100)
-                
-    #             self.time += duration_in_beats
-
-    #         elif event["type"] == "rest":
-    #             duration_in_beats = event["duration"] / PPQN
-    #             self.time += duration_in_beats
-
     def generate(self):
         self.time = 0.0 
-        PPQN = 12.0 
 
         def process_node(node):
             # 1. Obsługa słowników z AST (np. track, play, set_param)
@@ -81,13 +47,17 @@ class MidiGenerator:
             # 2. Obsługa obiektów muzycznych
             elif isinstance(node, Note):
                 midi_pitch = self._pitch_to_midi_num(node.pitch, node.octave)
-                duration_in_beats = node.duration / PPQN
+                
+                # NOWY WZÓR MUZYCZNY: 4.0 / podział taktu
+                # np. 4.0 / 4 (ćwierćnuta) = 1.0 beat
+                # np. 4.0 / 8 (ósemka)     = 0.5 beat
+                duration_in_beats = 4.0 / float(node.duration)
                 
                 self.midi.addNote(self.track, self.channel, midi_pitch, self.time, duration_in_beats, 100)
                 self.time += duration_in_beats
 
             elif isinstance(node, Chord):
-                duration_in_beats = node.duration / PPQN
+                duration_in_beats = 4.0 / float(node.duration)
                 # Chord ma wewnątrz listę obiektów Note
                 for n in node.notes:
                     midi_pitch = self._pitch_to_midi_num(n.pitch, n.octave)
@@ -96,7 +66,7 @@ class MidiGenerator:
                 self.time += duration_in_beats
 
             elif isinstance(node, Rest):
-                duration_in_beats = node.duration / PPQN
+                duration_in_beats = 4.0 / float(node.duration)
                 self.time += duration_in_beats
 
             elif isinstance(node, Sequence):
