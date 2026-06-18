@@ -11,7 +11,7 @@ Projekt **MelodyLang** to kompleksowy kompilator zbudowany w oparciu o specyfika
 W ramach rozwoju projekt został rozbudowany o:
 - Bezpośredni interpreter czasu rzeczywistego (bez generowania plików pośrednich `.mid`).
 - Zaawansowany system obsługi błędów (wskazywanie dokładnej linii, kolumny oraz własne, czytelne komunikaty błędów leksykalnych, składniowych i semantycznych).
-- Inżynierski system czasu (kwantyzacja PPQN = 12), wspierający złożone struktury rytmiczne (np. triole ósemkowe, nuty z kropką).
+- Profesjonalny, klasyczny system czasu muzycznego (np. 4 = ćwierćnuta, 8 = ósemka), ze wsparciem dla liczb zmiennoprzecinkowych (ułamków), co pozwala na precyzyjne definiowanie nut z kropką (np. 2.666) oraz triol.
 - Wbudowaną artykulację dźwięku (bramka czasowa / Gate na poziomie 85%) zastępującą ręczne definiowanie krótkich pauz między nutami.
 - Silne typowanie dynamiczne i polimorficzne typy danych (np. pojedyncze nuty obok całych akordów).
 - Metaprogramowanie przy użyciu makr muzycznych (`@TRANSPOSE`, `@REVERSE`).
@@ -28,7 +28,7 @@ W procesie skanowania tekst wejściowy rozbijany jest na tokeny zaprezentowane w
 | `PLAY`        | `"PLAY"`                             | Wywołanie funkcji odpowiedzialnej za odtworzenie struktur lub zmiennych.|
 | `MACRO`       | `/@TRANSPOSE\|@REVERSE/`             | Wywołanie makra modyfikującego zachowanie danego bloku w czasie.      |
 | `CNAME`       | `/[a-zA-Z_][a-zA-Z0-9_]*/`           | Identyfikator dla nazw zmiennych oraz ścieżek dźwiękowych.            |
-| `INT`         | `/[0-9]+/`                           | Wartość liczbowa (tempo, powtórzenia, czas trwania nuty/pauzy).       |
+| `INT/NUMBER`  | `/[0-9]+(\.[0-9]+)?/`                | Wartość liczbowa (całkowita dla pętli, ułamkowa dla tempa i czasu).   |
 | `NOTE_PITCH`  | `/[A-G][b#]?[0-9]?/`                 | Reprezentacja nuty wraz z oktawą (np. C4, F#3, Bb5).                  |
 | `REST_CHAR`   | `/P/`                                | Znak pauzy muzycznej.                                                 |
 
@@ -39,7 +39,7 @@ Rozwinięty potok kompilacji dzieli się na trzy fazy:
 1. **Skaner i Parser (LARK)** - `grammar.lark` stanowi rdzeń definiujący parsowanie kodu wejściowego do formy bezkontekstowego drzewa (Parse Tree). Warstwa ta zawiera zaimplementowaną precyzyjną ochronę przed nieznanymi znakami i nieoczekiwanymi tokenami.
 2. **AST Transformer** - `compiler.py` nadpisuje wygenerowane węzły drzewa, wdrażając system typów (`runtime_types.py`) oraz ewaluację makr, ujednolicając wszystko do potężnej struktury gotowej dla wybranego Backend'u. Logika ta również waliduje występowanie symboli (weryfikacja semantyczna).
 3. **Generator MIDI lub Live Interpreter**:
-   - **MidiGenerator** (`midi_generator.py` / `main.py`) - Iteruje po instrukcjach i konwertuje struktury notacyjne na finalny, binarny plik muzyczny `.mid`, zachowując pełną zgodność z rozdzielczością ułamkową PPQN=12.
+   - **MidiGenerator** (`midi_generator.py` / `main.py`) - Iteruje po instrukcjach i konwertuje struktury notacyjne na finalny, binarny plik muzyczny `.mid`, implementując dynamiczny przelicznik beata (`4.0 / duration`).
    - **MelodyInterpreter** (`interpreter.py` / `main_interpreter.py`) - Przetwarza obiekty w locie i odtwarza dźwięki w czasie rzeczywistym poprzez systemowy port MIDI. Zawiera blokadę przed zawieszonymi dźwiękami (hanging notes) oraz zintegrowany mechanizm artykulacji.
 
 ## Instrukcja uruchomienia
@@ -48,13 +48,3 @@ Rozwinięty potok kompilacji dzieli się na trzy fazy:
 Aby zainstalować wszystkie wymagane zależności dla analizatora składniowego, generatora i interfejsu audio, użyj komendy:
 ```bash
 pip install lark midiutil mido python-rtmidi
-
-Uruchomienie tradycyjne (Transpiler do pliku MIDI):
-Aby skompilować plik z kodem (domyślnie użyje example.music i wygeneruje output.mid), użyj:
-
-python main.py --input example.music --output output.mid
-
-Uruchomienie nowego Live Interpretera (Odtwarzanie w locie):
-Aby odtworzyć utwór wykorzystujący zaawansowany system typów i makra bezpośrednio na żywo, użyj:
-
-python main_interpreter.py --input song.music

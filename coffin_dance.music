@@ -1,0 +1,57 @@
+SET TEMPO = 145
+
+# ==========================================
+# FRYDERYK CHOPIN - ETIUDA REWOLUCYJNA (Op. 10 Nr 12)
+# Pokaz mozliwosci polimorficznych (szybkie pasaże + potezne akordy)
+# ==========================================
+
+# WSTEP: Potężne uderzenie dominanty (Akord G7) na wejście
+AkordWejsciowy = [<G4, B4, D5, F5>:4]
+
+# Słynny, wściekły zjazd szesnastkowy z lewej ręki
+# 16 = szesnastki (1/4 uderzenia, 4.0 / 16.0 = 0.25 beata)
+ZjazdW_Dol = [
+    F5:16, D5:16, B4:16, G4:16,
+    F4:16, D4:16, B3:16, G3:16,
+    F3:16, D3:16, B2:16, G2:16,
+    Ab2:16, F2:16, D2:16, B1:16
+]
+
+# Krótkie narastanie napiecia na dole klawiatury
+Narastanie = [
+    C2:16, D2:16, Eb2:16, F2:16,
+    G2:16, Ab2:16, Bb2:16, B2:16
+]
+
+# GLOWNY TEMAT: Dramatyczne uderzenia w prawej ręce
+# 2.666 = ćwierćnuta z kropką (1.5 uderzenia)
+# 8 = ósemka (0.5 uderzenia)
+# 2 = półnuta (2 uderzenia)
+TematGlowny = [
+    <C4, Eb4, G4, C5>:2.666, 
+    <D4, F4, G4, B4>:8, 
+    <C4, Eb4, G4, C5>:2
+]
+
+KolejnyMotyw = [
+    <Eb4, G4, C5, Eb5>:2.666,
+    <F4, A4, C5, Eb5>:8,
+    <G4, B4, D5, F5>:2
+]
+
+TRACK EtiudaRewolucyjna {
+    # 1. Eksplozja na wstepie
+    PLAY(AkordWejsciowy)
+    PLAY(ZjazdW_Dol)
+    PLAY(Narastanie)
+    
+    # 2. Wejscie glownego motywu
+    PLAY(TematGlowny)
+    PLAY(KolejnyMotyw)
+    
+    # 3. Zwiekszenie dynamiki - gramy zjazd transponowany o oktawe wyzej
+    PLAY(@TRANSPOSE(ZjazdW_Dol, 12))
+    
+    # 4. Epickie, finalowe potrójne uderzenie C-moll na całej długości (cała nuta = 1)
+    PLAY([<C3, C4, G4, C5, Eb5>:1])
+}

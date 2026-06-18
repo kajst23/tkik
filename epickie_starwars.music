@@ -5,36 +5,53 @@ SET TEMPO = 110
 # 1 = cała nuta (4 uderzenia)
 # 2 = półnuta (2 uderzenia)
 # 4 = ćwierćnuta (1 uderzenie)
+# 4. = ćwierćnuta z kropką (1.5 uderzenia)  <-- DODANE DO MARSZU
 # 8 = ósemka (1/2 uderzenia)
 # 12 = triola ósemkowa (1/3 uderzenia) -> 4.0 / 12.0 = 0.333!
+# P:4 = pauza ćwierćnutowa (1 uderzenie)   <-- DODANE DLA WYRÓWNANIA
+# P:2 = pauza półnutowa (2 uderzenia)      <-- DODANE DLA WYRÓWNANIA
 # ==========================================
 
-# Przedtakt: Idealna triola ósemkowa napędzająca utwór
+# Przedtakt: Idealna triola ósemkowa napędzająca utwór (łącznie 1 uderzenie)
 FanfaraIntro = [G4:12, G4:12, G4:12]
 
 # Część A: Główny, majestatyczny motyw
-MotywGlownyA = [C5:2, G5:2, F5:12, E5:12, D5:12, C6:2, G5:4, F5:12, E5:12, D5:12, C6:2, G5:4, F5:12, E5:12, F5:12, D5:2]
+# Matematyka taktów (każdy ma równe 4 uderzenia):
+# Takt 1: C5(2) + G5(2) = 4
+# Takt 2: F-E-D(1) + C6(2) + G5(1) = 4
+# Takt 3: F-E-D(1) + C6(2) + G5(1) = 4
+# Takt 4: F-E-F(1) + D5(2) + P:4(1 ud. pauzy na oddech) = 4
+MotywGlownyA = [C5:2, G5:2, F5:12, E5:12, D5:12, C6:2, G5:4, F5:12, E5:12, D5:12, C6:2, G5:4, F5:12, E5:12, F5:12, D5:2, P:4]
 
 # Część B: Rozwinięcie/Mostek (marsz)
-MotywGlownyB = [G4:12, G4:12, G4:12, A4:2, A4:8, F5:4, E5:8, D5:8, C5:8, C5:8, D5:8, E5:8, D5:4, A4:8, B4:8, G4:2]
+# Matematyka taktów:
+# Takt 1: A4(1.5) + A4(0.5) + F5(1) + E5(0.5) + D5(0.5) = 4
+# Takt 2: C5(0.5)*2 + D5(0.5) + E5(0.5) + D5(1) + A4(0.5) + B4(0.5) = 4
+# Takt 3: G4(2) + P:2(2 ud. pauzy) = 4
+MotywGlownyB = [A4:4., A4:8, F5:4, E5:8, D5:8, C5:8, C5:8, D5:8, E5:8, D5:4, A4:8, B4:8, G4:2, P:2]
+
 
 TRACK EpickieGwiezdneWojny {
-    # 1. Trzy uderzenia
+    # 1. Przedtakt (triole)
     PLAY(FanfaraIntro)
     
     # 2. Główna linia melodyczna
     PLAY(MotywGlownyA)
     
-    # 3. Część marszowa
+    # 3. Zamiast wpisywać triole na twardo w MotywGlownyB, 
+    # używamy ponownie Fanfary jako przedtaktu do marszu!
+    PLAY(FanfaraIntro)
+    
+    # 4. Część marszowa
     PLAY(MotywGlownyB)
     
-    # 4. Oddech i powrót z modulacją o kwintę w górę (+7 półtonów)
-    # P:1 to pauza trwająca całą nutę (4 uderzenia)
-    PLAY(P:1)
+    # 5. Oddech przed transpozycją (półnuta pauzy)
+    PLAY(P:2)
     
+    # 6. Powrót z modulacją o kwintę w górę (+7 półtonów)
     PLAY(@TRANSPOSE(FanfaraIntro, 7))
     PLAY(@TRANSPOSE(MotywGlownyA, 7))
     
-    # 5. Epickie zakończenie ujęte w sekwencję []
+    # 7. Epickie zakończenie (1 uderzenie triol + 4 uderzenia finałowego akordu)
     PLAY([G5:12, G5:12, G5:12, C6:1])
 }

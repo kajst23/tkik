@@ -11,7 +11,7 @@ class MelodyTransformer(Transformer):
         return [item for item in items if item is not None and getattr(item, 'get', lambda x: None)('type') != 'assignment']
 
     def set_param(self, items):
-        return {"type": "set_param", "name": str(items[0]), "value": int(items[1])}
+        return {"type": "set_param", "name": str(items[0]), "value": float(items[1])}
 
     def assignment(self, items):
         var_name = str(items[0])
@@ -49,23 +49,10 @@ class MelodyTransformer(Transformer):
         times = int(items[1]) if len(items) > 1 else 1
         return {"type": "play", "value": expr_val, "times": times}
 
-    # def int_expr(self, items):
-    #     if len(items) == 2 and str(items[0]) == "-":
-    #         val = -int(items[1])
-    #     elif len(items) == 1 and str(items[0]).startswith("-"):
-    #         val = int(str(items[0]))
-    #     else:
-    #         val = int(items[0])
-            
-    #     return Integer(val)
-
     def int_expr(self, args):
-        # Pobieramy wartość
         val = float(args[-1])
         if len(args) > 1 and args[0] == "-":
             val = -val
-            
-        # ZWRACAMY OBIEKT Integer (żeby makro mogło odczytać val.value)
         return Integer(val)
     
     def note_expr(self, items):
@@ -103,37 +90,39 @@ class MelodyTransformer(Transformer):
         match = re.match(r"([A-G][b#]?)([0-9]?)", raw_pitch)
         pitch = match.group(1)
         octave = int(match.group(2)) if match.group(2) else 4
-        duration = items[1] if len(items) > 1 and items[1] is not None else 4
+        # Upewniamy się, że duration przyjmuje wartości zmiennoprzecinkowe (float) z poprzednich warstw
+        duration = items[1] if len(items) > 1 and items[1] is not None else 4.0
         return Note(pitch, octave, duration)
 
     def chord(self, items):
-        duration = 4
+        duration = 4.0
         pitches = []
         for item in items:
-            if isinstance(item, int):
-                duration = item
+            # Rozszerzenie sprawdzania czasu trwania: przyjmujemy int ORAZ float
+            if isinstance(item, (int, float)):
+                duration = float(item)
             elif item is not None:
                 match = re.match(r"([A-G][b#]?)([0-9]?)", str(item))
-                p = match.group(1)
-                o = int(match.group(2)) if match.group(2) else 4
-                pitches.append({"pitch": p, "octave": o})
+                if match:
+                    p = match.group(1)
+                    o = int(match.group(2)) if match.group(2) else 4
+                    pitches.append({"pitch": p, "octave": o})
         return Chord(pitches, duration)
 
     def rest(self, items):
-        duration = 4
+        duration = 4.0
         for item in items:
             if item is not None:
                 if str(item) == 'P':
                     continue
                 if hasattr(item, 'value'):
-                    duration = int(item.value)
+                    duration = float(item.value)
                 else:
                     try:
-                        duration = int(str(item))
+                        duration = float(str(item))
                     except ValueError:
                         continue
         return Rest(duration)
-    
 
     def duration(self, items):
         return float(items[0])
@@ -144,7 +133,8 @@ class MelodyTransformer(Transformer):
 
         if macro_name == "TRANSPOSE":
             target = args[0]
-            steps = args[1].value
+            # Transpozycja powinna operować na liczbach całkowitych
+            steps = int(args[1].value) 
             import copy
             if isinstance(target, Sequence):
                 new_elems = []
